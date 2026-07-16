@@ -1,0 +1,58 @@
+{
+  "name": "atlassian-marketplace-mcp",
+  "version": "0.3.2",
+  "description": "Model Context Protocol server exposing the Atlassian Marketplace vendor APIs (v3 reporting + v1 promotions) as 95 LLM-callable tools — licenses, transactions, promotions, reviews, churn/conversion metrics, customer insights, app listings, privacy/security, and more.",
+  "license": "UNLICENSED",
+  "private": true,
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "atlassian",
+    "marketplace",
+    "jira",
+    "confluence",
+    "vendor",
+    "licenses",
+    "transactions",
+    "promotions"
+  ],
+  "type": "module",
+  "bin": {
+    "atlassian-marketplace-mcp": "dist/server.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "test:safe": "node scripts/test-all.mjs",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "ATLASSIAN_EMAIL=unit@test ATLASSIAN_API_TOKEN=unit-token MARKETPLACE_DEVELOPER_ID=00000000-0000-0000-0000-000000000000 MARKETPLACE_PARTNER_ID=0 vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:watch": "vitest",
+    "docs:api": "typedoc && node scripts/fix-external-links.mjs",
+    "docs:api:watch": "typedoc --watch",
+    "docs:tools": "node scripts/gen-tools-md.mjs",
+    "docs:tool-pages": "node scripts/gen-tool-pages.mjs",
+    "docs:tsdoc": "node scripts/inject-endpoint-tables.mjs",
+    "docs:verify-links": "node scripts/verify-spec-urls.mjs",
+    "docs:all": "npm run build && npm run docs:tsdoc && npm run build && npm run docs:tools && npm run docs:tool-pages && npm run docs:api && npm run docs:verify-links"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typedoc": "^0.28.19",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.8"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

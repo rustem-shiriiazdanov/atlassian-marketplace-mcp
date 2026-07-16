@@ -1,0 +1,29 @@
+/*
+ * Project overrides for TypeDoc's default theme.
+ *
+ * Problem: our auto-generated endpoint tables contain long, unbreakable URLs
+ * (developer.atlassian.com/.../api-rest-3-...-get). At >=1200px viewport the
+ * page layout is a 3-column grid where the Settings panel lives in the
+ * right-hand TOC column. A wide table in .col-content overflows that column's
+ * `minmax(0, 2.5fr)` boundary and slides under the Settings widget, which
+ * still sits on top and silently swallows clicks on the "docs" anchors.
+ *
+ * Fix: force long words/URLs inside .col-content tables to wrap, so the
+ * table never escapes its column.
+ */
+.col-content table {
+    table-layout: auto;
+    max-width: 100%;
+    width: 100%;
+}
+.col-content table td,
+.col-content table th {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    min-width: 0;
+}
+.col-content table code {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+}

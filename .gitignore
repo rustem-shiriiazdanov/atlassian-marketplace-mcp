@@ -1,0 +1,32 @@
+node_modules/
+dist/
+.env
+.env*.local
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+# Test / coverage output
+coverage/
+.vitest/
+
+# Response spill files (jsonResult writes oversized payloads to the OS temp dir;
+# this catches any that land in the tree) + local scratch
+atlassian-mcp-*.json
+atlassian-mcp-*.txt
+*.tmp
+
+# Claude Code session-local state (not part of the project)
+.claude/
+
+# macOS Finder/iCloud duplicate artifacts (e.g. "index 2.html")
+* 2.*
+* 3.*
+
+# Generated data exports (contain the vendor's live Marketplace data)
+downloads/
+
+# Generated TypeDoc HTML site (build output — regenerate with `npm run docs:api`).
+# The human-readable docs (README, docs/*.md, docs/tools/*.md) ARE tracked.
+docs/api/
