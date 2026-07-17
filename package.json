@@ -2,8 +2,8 @@
   "name": "atlassian-marketplace-mcp",
   "version": "0.3.2",
   "description": "Model Context Protocol server exposing the Atlassian Marketplace vendor APIs (v3 reporting + v1 promotions) as 95 LLM-callable tools — licenses, transactions, promotions, reviews, churn/conversion metrics, customer insights, app listings, privacy/security, and more.",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "MIT",
+  "private": false,
   "keywords": [
     "mcp",
     "model-context-protocol",

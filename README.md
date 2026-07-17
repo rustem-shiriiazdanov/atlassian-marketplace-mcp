@@ -193,4 +193,4 @@ src/
 
 ## License
 
-Currently marked `UNLICENSED` / `private: true` in `package.json` — i.e., not redistributed publicly. If you intend to open-source this, replace with a real license (MIT, Apache-2.0, etc.) and add a `LICENSE` file.
+[MIT](LICENSE) © 2026 Rustem Shiriiazdanov. Use it, fork it, ship it.
