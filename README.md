@@ -44,7 +44,8 @@ npm run build
 Copy the example env file and fill it in:
 
 ```bash
-cp .env.example .env
+cp .env.example .env        # macOS / Linux / PowerShell
+# Windows cmd.exe:  copy .env.example .env
 ```
 
 The four required variables:
@@ -99,16 +100,26 @@ node dist/server.js
 The server speaks MCP over stdio. It will wait for an MCP client to connect. To smoke-test by hand:
 
 ```bash
-# Send a tools/list request via stdin to see all 95 tools
+# Send a tools/list request via stdin to see all 95 tools (macOS / Linux)
 printf '%s\n' \
   '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"sh","version":"0"}}}' \
   '{"jsonrpc":"2.0","method":"notifications/initialized"}' \
   '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' | node dist/server.js
 ```
 
+On Windows (PowerShell) the same smoke test is:
+
+```powershell
+@'
+{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"ps","version":"0"}}}
+{"jsonrpc":"2.0","method":"notifications/initialized"}
+{"jsonrpc":"2.0","id":2,"method":"tools/list"}
+'@ | node dist/server.js
+```
+
 ## Wire into Claude Code
 
-Add this to your `~/.claude.json` under `mcpServers` (or a project-local `.mcp.json`):
+Add this to your `~/.claude.json` under `mcpServers` (or a project-local `.mcp.json`). On Windows the file lives at `%USERPROFILE%\.claude.json`; use a Windows-style absolute path in `args` (forward slashes are fine in JSON):
 
 ```json
 {
@@ -120,6 +131,13 @@ Add this to your `~/.claude.json` under `mcpServers` (or a project-local `.mcp.j
   }
 }
 ```
+
+```json
+// Windows example args:
+"args": ["C:/Users/you/Atlassian_mcp/dist/server.js"]
+```
+
+The server finds its `.env` in the repo root even when the MCP client launches it from a different working directory, so no `env` block is needed in the client config (though you can use one to override).
 
 Restart Claude Code. The 95 tools are then available as `mcp__atlassian-marketplace__*` in your next session.
 

@@ -1,6 +1,15 @@
 import { config as loadEnv } from "dotenv";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
+// Load .env from the process cwd first (highest dotenv precedence), then fall
+// back to the repo root relative to this module (dist/config.js -> ../.env).
+// MCP clients launch `node <abs-path>/dist/server.js` from an arbitrary
+// working directory, so a cwd-only lookup would miss the repo's .env entirely.
+// dotenv never overwrites already-set vars, so real environment variables and
+// the cwd .env always win over the fallback.
 loadEnv();
+loadEnv({ path: join(dirname(fileURLToPath(import.meta.url)), "..", ".env") });
 
 function required(name: string): string {
   const v = process.env[name];

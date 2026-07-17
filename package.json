@@ -30,7 +30,7 @@
     "typecheck": "tsc --noEmit",
     "test:safe": "node scripts/test-all.mjs",
     "test": "npm run test:unit && npm run test:integration",
-    "test:unit": "ATLASSIAN_EMAIL=unit@test ATLASSIAN_API_TOKEN=unit-token MARKETPLACE_DEVELOPER_ID=00000000-0000-0000-0000-000000000000 MARKETPLACE_PARTNER_ID=0 vitest run tests/unit",
+    "test:unit": "cross-env ATLASSIAN_EMAIL=unit@test ATLASSIAN_API_TOKEN=unit-token MARKETPLACE_DEVELOPER_ID=00000000-0000-0000-0000-000000000000 MARKETPLACE_PARTNER_ID=0 vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
     "test:watch": "vitest",
     "docs:api": "typedoc && node scripts/fix-external-links.mjs",
@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "cross-env": "^10.1.0",
     "typedoc": "^0.28.19",
     "typescript": "^5.6.0",
     "vitest": "^4.1.8"

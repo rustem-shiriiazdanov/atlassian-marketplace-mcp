@@ -45,7 +45,9 @@ export function exportAcceptHeader(accept?: string): string {
  *
  * **Truncation behavior:** if the serialized response exceeds
  * `MAX_RESPONSE_CHARS` (default 50_000, ~12k tokens; override via env), the
- * full payload is dumped to a tmp file (`/tmp/atlassian-mcp-<sha1-16>.{json,txt}`)
+ * full payload is dumped to a tmp file in the OS temp dir
+ * (`<os.tmpdir()>/atlassian-mcp-<sha1-16>.{json,txt}` — e.g. `/tmp` on Linux/macOS,
+ * `%TEMP%` on Windows)
  * and the returned envelope contains a small summary + 2k preview + file path.
  * Subsequent calls with the same content reuse the existing file (filename is a
  * content hash). Set `MAX_RESPONSE_CHARS=0` env to disable truncation entirely.
