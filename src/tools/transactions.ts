@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, REPORTING_BASE, TX_FILTERS, READ_ONLY, WRITE_SAFE, EXPORT_TIMEOUT_MS, ACCEPT_CSV_JSON, exportAcceptHeader } from "./_shared.js";
+import { jsonResult, asQuery, seg, REPORTING_BASE, TX_FILTERS, READ_ONLY, WRITE_SAFE, EXPORT_TIMEOUT_MS, ACCEPT_CSV_JSON, exportAcceptHeader } from "./_shared.js";
 
 const TX_BASE = `${REPORTING_BASE}/sales/transactions`;
 
@@ -103,7 +103,7 @@ export function registerTransactionTools(server: McpServer): void {
     async ({ exportId }) =>
       jsonResult(
         await request({
-          path: `${TX_BASE}/async/export/${exportId}/status`,
+          path: `${TX_BASE}/async/export/${seg(exportId)}/status`,
         })
       )
   );
@@ -116,7 +116,7 @@ export function registerTransactionTools(server: McpServer): void {
     async ({ exportId }) =>
       jsonResult(
         await request({
-          path: `${TX_BASE}/async/export/${exportId}`,
+          path: `${TX_BASE}/async/export/${seg(exportId)}`,
           timeoutMs: EXPORT_TIMEOUT_MS,
         })
       )
@@ -139,7 +139,7 @@ export function registerTransactionTools(server: McpServer): void {
     READ_ONLY,
     async ({ metric, ...filters }) => {
       const data = await request({
-        path: `${TX_BASE}/${metric}`,
+        path: `${TX_BASE}/${seg(metric)}`,
         query: asQuery(filters),
       });
       return jsonResult(data);

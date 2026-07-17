@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
+import { jsonResult, seg, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
 
 // <auto-tsdoc-begin>
 /**
@@ -49,7 +49,7 @@ export function registerMigrationTools(server: McpServer): void {
     READ_ONLY,
     async ({ productId }) =>
       jsonResult(await request({
-        path: `/rest/3/cloud-migration-compatibility/products/${productId}`,
+        path: `/rest/3/cloud-migration-compatibility/products/${seg(productId)}`,
       }))
   );
 
@@ -64,7 +64,7 @@ export function registerMigrationTools(server: McpServer): void {
     async ({ productId, body }) => {
       await request({
         method: "PUT",
-        path: `/rest/3/cloud-migration-compatibility/products/${productId}`,
+        path: `/rest/3/cloud-migration-compatibility/products/${seg(productId)}`,
         body,
       });
       return jsonResult({ ok: true, productId });
@@ -82,7 +82,7 @@ export function registerMigrationTools(server: McpServer): void {
     async ({ productId, body }) => {
       await request({
         method: "PATCH",
-        path: `/rest/3/cloud-migration-compatibility/products/${productId}`,
+        path: `/rest/3/cloud-migration-compatibility/products/${seg(productId)}`,
         body,
       });
       return jsonResult({ ok: true, productId });

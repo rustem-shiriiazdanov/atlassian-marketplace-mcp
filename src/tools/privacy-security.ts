@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
+import { jsonResult, asQuery, seg, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
 
 // <auto-tsdoc-begin>
 /**
@@ -54,7 +54,7 @@ export function registerPrivacySecurityTools(server: McpServer): void {
     READ_ONLY,
     async ({ productId, ...filters }) =>
       jsonResult(await request({
-        path: `/rest/3/privacy-and-security/products/${productId}`,
+        path: `/rest/3/privacy-and-security/products/${seg(productId)}`,
         query: asQuery(filters),
       }))
   );
@@ -70,7 +70,7 @@ export function registerPrivacySecurityTools(server: McpServer): void {
     async ({ productId, body }) => {
       await request({
         method: "PUT",
-        path: `/rest/3/privacy-and-security/products/${productId}`,
+        path: `/rest/3/privacy-and-security/products/${seg(productId)}`,
         body,
       });
       return jsonResult({ ok: true, productId });
@@ -85,7 +85,7 @@ export function registerPrivacySecurityTools(server: McpServer): void {
     async ({ productId }) => {
       await request({
         method: "DELETE",
-        path: `/rest/3/privacy-and-security/products/${productId}`,
+        path: `/rest/3/privacy-and-security/products/${seg(productId)}`,
       });
       return jsonResult({ ok: true, productId });
     }
@@ -99,7 +99,7 @@ export function registerPrivacySecurityTools(server: McpServer): void {
     async ({ productId }) => {
       await request({
         method: "POST",
-        path: `/rest/3/privacy-and-security/products/${productId}/publish`,
+        path: `/rest/3/privacy-and-security/products/${seg(productId)}/publish`,
       });
       return jsonResult({ ok: true, productId });
     }

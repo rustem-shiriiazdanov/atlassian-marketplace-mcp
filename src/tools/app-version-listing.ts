@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
+import { jsonResult, asQuery, seg, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
 
 // <auto-tsdoc-begin>
 /**
@@ -58,7 +58,7 @@ export function registerAppVersionListingTools(server: McpServer): void {
     READ_ONLY,
     async ({ appSoftwareId, ...filters }) =>
       jsonResult(await request({
-        path: `/rest/3/app-software/${appSoftwareId}/listings/all`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/listings/all`,
         query: asQuery(filters),
       }))
   );
@@ -73,7 +73,7 @@ export function registerAppVersionListingTools(server: McpServer): void {
     READ_ONLY,
     async ({ appSoftwareId, buildNumber }) =>
       jsonResult(await request({
-        path: `/rest/3/app-software/${appSoftwareId}/versions/${buildNumber}/listing`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/versions/${seg(buildNumber)}/listing`,
       }))
   );
 
@@ -89,7 +89,7 @@ export function registerAppVersionListingTools(server: McpServer): void {
     async ({ appSoftwareId, buildNumber, body }) => {
       const data = await request({
         method: "POST",
-        path: `/rest/3/app-software/${appSoftwareId}/versions/${buildNumber}/listing`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/versions/${seg(buildNumber)}/listing`,
         body,
       });
       return jsonResult(data);
@@ -108,7 +108,7 @@ export function registerAppVersionListingTools(server: McpServer): void {
     async ({ appSoftwareId, buildNumber, body }) => {
       await request({
         method: "PUT",
-        path: `/rest/3/app-software/${appSoftwareId}/versions/${buildNumber}/listing`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/versions/${seg(buildNumber)}/listing`,
         body,
       });
       return jsonResult({ ok: true, appSoftwareId, buildNumber });

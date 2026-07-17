@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
+import { jsonResult, asQuery, seg, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
 
 // <auto-tsdoc-begin>
 /**
@@ -59,7 +59,7 @@ export function registerAppSoftwareTools(server: McpServer): void {
     READ_ONLY,
     async ({ appKey, ...filters }) =>
       jsonResult(await request({
-        path: `/rest/3/app-software/app-key/${appKey}`,
+        path: `/rest/3/app-software/app-key/${seg(appKey)}`,
         query: asQuery(filters),
       }))
   );
@@ -82,7 +82,7 @@ export function registerAppSoftwareTools(server: McpServer): void {
     READ_ONLY,
     async ({ appSoftwareId, ...filters }) =>
       jsonResult(await request({
-        path: `/rest/3/app-software/${appSoftwareId}/versions`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/versions`,
         query: asQuery(filters),
       }))
   );
@@ -98,7 +98,7 @@ export function registerAppSoftwareTools(server: McpServer): void {
     async ({ appSoftwareId, body }) => {
       const data = await request({
         method: "POST",
-        path: `/rest/3/app-software/${appSoftwareId}/versions`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/versions`,
         body,
       });
       return jsonResult(data);
@@ -115,7 +115,7 @@ export function registerAppSoftwareTools(server: McpServer): void {
     READ_ONLY,
     async ({ appSoftwareId, buildNumber }) =>
       jsonResult(await request({
-        path: `/rest/3/app-software/${appSoftwareId}/versions/${buildNumber}`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/versions/${seg(buildNumber)}`,
       }))
   );
 
@@ -131,7 +131,7 @@ export function registerAppSoftwareTools(server: McpServer): void {
     async ({ appSoftwareId, buildNumber, body }) => {
       await request({
         method: "PUT",
-        path: `/rest/3/app-software/${appSoftwareId}/versions/${buildNumber}`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/versions/${seg(buildNumber)}`,
         body,
       });
       return jsonResult({ ok: true, appSoftwareId, buildNumber });
@@ -148,7 +148,7 @@ export function registerAppSoftwareTools(server: McpServer): void {
     READ_ONLY,
     async ({ appSoftwareId, ...filters }) =>
       jsonResult(await request({
-        path: `/rest/3/app-software/${appSoftwareId}/tokens`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/tokens`,
         query: asQuery(filters),
       }))
   );
@@ -164,7 +164,7 @@ export function registerAppSoftwareTools(server: McpServer): void {
     async ({ appSoftwareId, body }) => {
       const data = await request({
         method: "POST",
-        path: `/rest/3/app-software/${appSoftwareId}/tokens`,
+        path: `/rest/3/app-software/${seg(appSoftwareId)}/tokens`,
         body: body ?? {},
       });
       return jsonResult(data);

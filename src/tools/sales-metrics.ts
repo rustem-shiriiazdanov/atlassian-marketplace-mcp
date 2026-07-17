@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, REPORTING_BASE, READ_ONLY, EXPORT_TIMEOUT_MS, ACCEPT_CSV_JSON, exportAcceptHeader } from "./_shared.js";
+import { jsonResult, asQuery, seg, REPORTING_BASE, READ_ONLY, EXPORT_TIMEOUT_MS, ACCEPT_CSV_JSON, exportAcceptHeader } from "./_shared.js";
 
 const METRICS_BASE = `${REPORTING_BASE}/sales/metrics`;
 
@@ -185,7 +185,7 @@ export function registerSalesMetricsTools(server: McpServer): void {
     READ_ONLY,
     async ({ saleMetric, ...filters }) =>
       jsonResult(await request({
-        path: `${METRICS_BASE}/${saleMetric}/details`,
+        path: `${METRICS_BASE}/${seg(saleMetric)}/details`,
         query: asQuery(filters),
       }))
   );
@@ -202,7 +202,7 @@ export function registerSalesMetricsTools(server: McpServer): void {
     READ_ONLY,
     async ({ saleMetric, ...filters }) =>
       jsonResult(await request({
-        path: `${METRICS_BASE}/${saleMetric}/details/export`,
+        path: `${METRICS_BASE}/${seg(saleMetric)}/details/export`,
         query: asQuery(filters),
         accept: exportAcceptHeader(filters.accept),
         timeoutMs: EXPORT_TIMEOUT_MS,

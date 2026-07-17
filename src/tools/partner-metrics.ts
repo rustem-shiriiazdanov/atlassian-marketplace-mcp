@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, READ_ONLY } from "./_shared.js";
+import { jsonResult, asQuery, seg, READ_ONLY } from "./_shared.js";
 import { config } from "../config.js";
 
 // <auto-tsdoc-begin>
@@ -54,7 +54,7 @@ export function registerPartnerMetricsTools(server: McpServer): void {
     async ({ developerId, body, ...query }) =>
       jsonResult(await request({
         method: "POST",
-        path: `/rest/3/partner-metrics/developer-space/${developerId}`,
+        path: `/rest/3/partner-metrics/developer-space/${seg(developerId)}`,
         query: asQuery(query),
         body,
       }))

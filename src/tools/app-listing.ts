@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
+import { jsonResult, seg, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
 
 // <auto-tsdoc-begin>
 /**
@@ -47,7 +47,7 @@ export function registerAppListingTools(server: McpServer): void {
     { productId: z.string().describe("Product UUID") },
     READ_ONLY,
     async ({ productId }) =>
-      jsonResult(await request({ path: `/rest/3/product-listing/${productId}` }))
+      jsonResult(await request({ path: `/rest/3/product-listing/${seg(productId)}` }))
   );
 
   server.tool(
@@ -61,7 +61,7 @@ export function registerAppListingTools(server: McpServer): void {
     async ({ productId, body }) => {
       await request({
         method: "PUT",
-        path: `/rest/3/product-listing/${productId}`,
+        path: `/rest/3/product-listing/${seg(productId)}`,
         body,
       });
       return jsonResult({ ok: true, productId });

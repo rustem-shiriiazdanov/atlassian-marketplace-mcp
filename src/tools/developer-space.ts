@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
+import { jsonResult, asQuery, seg, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
 import { config } from "../config.js";
 
 // <auto-tsdoc-begin>
@@ -55,7 +55,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     { vendorId: z.string() },
     READ_ONLY,
     async ({ vendorId }) =>
-      jsonResult(await request({ path: `/rest/3/developer-space/vendor/${vendorId}` }))
+      jsonResult(await request({ path: `/rest/3/developer-space/vendor/${seg(vendorId)}` }))
   );
 
   server.tool(
@@ -67,7 +67,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     },
     READ_ONLY,
     async ({ developerId }) =>
-      jsonResult(await request({ path: `/rest/3/developer-space/${developerId}` }))
+      jsonResult(await request({ path: `/rest/3/developer-space/${seg(developerId)}` }))
   );
 
   server.tool(
@@ -79,7 +79,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     READ_ONLY,
     async ({ developerId }) =>
       jsonResult(await request({
-        path: `/rest/3/developer-space/${developerId}/catalog-account`,
+        path: `/rest/3/developer-space/${seg(developerId)}/catalog-account`,
       }))
   );
 
@@ -92,7 +92,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     READ_ONLY,
     async ({ developerId }) =>
       jsonResult(await request({
-        path: `/rest/3/developer-space/${developerId}/listings`,
+        path: `/rest/3/developer-space/${seg(developerId)}/listings`,
       }))
   );
 
@@ -107,7 +107,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     READ_ONLY,
     async ({ developerId, ...filters }) =>
       jsonResult(await request({
-        path: `/rest/3/developer-space/${developerId}/members`,
+        path: `/rest/3/developer-space/${seg(developerId)}/members`,
         query: asQuery(filters),
       }))
   );
@@ -122,7 +122,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     READ_ONLY,
     async ({ developerId, aaid }) =>
       jsonResult(await request({
-        path: `/rest/3/developer-space/${developerId}/members/${aaid}`,
+        path: `/rest/3/developer-space/${seg(developerId)}/members/${seg(aaid)}`,
       }))
   );
 
@@ -138,7 +138,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     async ({ developerId, aaid, body }) => {
       await request({
         method: "POST",
-        path: `/rest/3/developer-space/${developerId}/members/${aaid}`,
+        path: `/rest/3/developer-space/${seg(developerId)}/members/${seg(aaid)}`,
         body: body ?? {},
       });
       return jsonResult({ ok: true, aaid });
@@ -157,7 +157,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     async ({ developerId, aaid, body }) => {
       await request({
         method: "PUT",
-        path: `/rest/3/developer-space/${developerId}/members/${aaid}`,
+        path: `/rest/3/developer-space/${seg(developerId)}/members/${seg(aaid)}`,
         body,
       });
       return jsonResult({ ok: true, aaid });
@@ -175,7 +175,7 @@ export function registerDeveloperSpaceTools(server: McpServer): void {
     async ({ developerId, aaid }) => {
       await request({
         method: "DELETE",
-        path: `/rest/3/developer-space/${developerId}/members/${aaid}`,
+        path: `/rest/3/developer-space/${seg(developerId)}/members/${seg(aaid)}`,
       });
       return jsonResult({ ok: true, aaid });
     }

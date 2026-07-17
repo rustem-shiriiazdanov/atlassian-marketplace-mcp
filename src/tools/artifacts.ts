@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, READ_ONLY, WRITE_SAFE } from "./_shared.js";
+import { jsonResult, seg, READ_ONLY, WRITE_SAFE } from "./_shared.js";
 
 /**
  * Multipart binary upload endpoints (POST /artifacts, POST /assets/images/{imageType})
@@ -74,6 +74,6 @@ export function registerArtifactTools(server: McpServer): void {
     { artifactId: z.string() },
     READ_ONLY,
     async ({ artifactId }) =>
-      jsonResult(await request({ path: `/rest/3/artifacts/${artifactId}` }))
+      jsonResult(await request({ path: `/rest/3/artifacts/${seg(artifactId)}` }))
   );
 }

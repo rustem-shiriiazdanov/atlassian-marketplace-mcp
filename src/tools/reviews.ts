@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
+import { jsonResult, asQuery, seg, READ_ONLY, DESTRUCTIVE } from "./_shared.js";
 
 // <auto-tsdoc-begin>
 /**
@@ -58,7 +58,7 @@ export function registerReviewTools(server: McpServer): void {
     READ_ONLY,
     async ({ productId, ...filters }) =>
       jsonResult(await request({
-        path: `/rest/3/products/${productId}/reviews`,
+        path: `/rest/3/products/${seg(productId)}/reviews`,
         query: asQuery(filters),
       }))
   );
@@ -73,7 +73,7 @@ export function registerReviewTools(server: McpServer): void {
     READ_ONLY,
     async ({ productId, reviewId }) =>
       jsonResult(await request({
-        path: `/rest/3/products/${productId}/reviews/${reviewId}`,
+        path: `/rest/3/products/${seg(productId)}/reviews/${seg(reviewId)}`,
       }))
   );
 
@@ -89,7 +89,7 @@ export function registerReviewTools(server: McpServer): void {
     async ({ productId, reviewId, response }) => {
       await request({
         method: "PUT",
-        path: `/rest/3/products/${productId}/reviews/${reviewId}/response`,
+        path: `/rest/3/products/${seg(productId)}/reviews/${seg(reviewId)}/response`,
         body: { response },
       });
       return jsonResult({ ok: true, productId, reviewId });
@@ -107,7 +107,7 @@ export function registerReviewTools(server: McpServer): void {
     async ({ productId, reviewId }) => {
       await request({
         method: "DELETE",
-        path: `/rest/3/products/${productId}/reviews/${reviewId}/response`,
+        path: `/rest/3/products/${seg(productId)}/reviews/${seg(reviewId)}/response`,
       });
       return jsonResult({ ok: true });
     }

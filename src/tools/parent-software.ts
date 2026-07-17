@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { request } from "../http-client.js";
-import { jsonResult, asQuery, READ_ONLY } from "./_shared.js";
+import { jsonResult, asQuery, seg, READ_ONLY } from "./_shared.js";
 
 /** limit + cursor pagination shared by the parent-software list endpoints. */
 const PS_PAGE = {
@@ -66,7 +66,7 @@ export function registerParentSoftwareTools(server: McpServer): void {
     READ_ONLY,
     async ({ parentSoftwareId }) =>
       jsonResult(await request({
-        path: `/rest/3/parent-software/${parentSoftwareId}`,
+        path: `/rest/3/parent-software/${seg(parentSoftwareId)}`,
       }))
   );
 
@@ -77,7 +77,7 @@ export function registerParentSoftwareTools(server: McpServer): void {
     READ_ONLY,
     async ({ parentSoftwareId, ...filters }) =>
       jsonResult(await request({
-        path: `/rest/3/parent-software/${parentSoftwareId}/versions`,
+        path: `/rest/3/parent-software/${seg(parentSoftwareId)}/versions`,
         query: asQuery(filters),
       }))
   );
@@ -93,7 +93,7 @@ export function registerParentSoftwareTools(server: McpServer): void {
     async ({ parentSoftwareId, buildNumber }) =>
       jsonResult(await request({
         // encode the segment — buildNumber is normally digits, but encode defensively.
-        path: `/rest/3/parent-software/${parentSoftwareId}/versions/build/${encodeURIComponent(String(buildNumber))}`,
+        path: `/rest/3/parent-software/${seg(parentSoftwareId)}/versions/build/${seg(buildNumber)}`,
       }))
   );
 
@@ -107,7 +107,7 @@ export function registerParentSoftwareTools(server: McpServer): void {
     READ_ONLY,
     async ({ parentSoftwareId, versionNumber }) =>
       jsonResult(await request({
-        path: `/rest/3/parent-software/${parentSoftwareId}/versions/number/${versionNumber}`,
+        path: `/rest/3/parent-software/${seg(parentSoftwareId)}/versions/number/${seg(versionNumber)}`,
       }))
   );
 }

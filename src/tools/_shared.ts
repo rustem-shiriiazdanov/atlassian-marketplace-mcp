@@ -85,7 +85,10 @@ export function jsonResult(data: unknown) {
   const looksJson = text.trimStart().startsWith("{") || text.trimStart().startsWith("[");
   const ext = looksJson ? "json" : "txt";
   const path = join(tmpdir(), `atlassian-mcp-${hash}.${ext}`);
-  if (!existsSync(path)) writeFileSync(path, text, "utf-8");
+  // 0o600: spill files can contain customer PII (licenses, SENs, emails,
+  // transactions). Restrict to the owner so other local users on a shared
+  // machine can't read them from the world-readable temp dir.
+  if (!existsSync(path)) writeFileSync(path, text, { encoding: "utf-8", mode: 0o600 });
   const summary = {
     _truncated: true,
     _file: path,
@@ -119,6 +122,21 @@ export const DESTRUCTIVE: ToolAnnotations = {
   idempotentHint: false,
   openWorldHint: true,
 };
+
+/**
+ * Encode a value for safe use as a SINGLE URL path segment.
+ *
+ * Tool-supplied ids (appKey, productId, aaid, buildNumber, …) are interpolated
+ * into request paths. Without encoding, a value containing `/`, `..`, `?` or `#`
+ * would alter the request's path/query structure (e.g. `../../developer-space/x`
+ * traverses to a different endpoint). `encodeURIComponent` turns those into inert
+ * data so the value stays one opaque segment; the receiving server decodes it back
+ * to the literal value. No-op for the normal id formats (UUIDs, numbers, reverse-dns
+ * app keys, version numbers); only affects values that carry URL-structural chars.
+ */
+export function seg(value: string | number): string {
+  return encodeURIComponent(String(value));
+}
 
 export function asQuery(args: Record<string, unknown>): Record<string, string | number | boolean | undefined> {
   const out: Record<string, string | number | boolean | undefined> = {};
